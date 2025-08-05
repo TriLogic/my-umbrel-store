@@ -2,7 +2,7 @@ id: trilogic-postgres-pgadmin
 name: PostgreSQL + pgAdmin
 version: "1.0.0"
 description: "PostgreSQL database server with pgAdmin web UI"
-developer: "Your Name"
+developer: "Andrew Friedl"
 category: development
 port: 5050
 icon: ./icon.png
