@@ -1,2 +1,2 @@
-# umbrel-postgres-pgadmin
-Run PostgresSQl and pgAdmin on your UmbrelOS Device
+# my-umbrel-store
+A collection of umbrel applications
