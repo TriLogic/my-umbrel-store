@@ -7,4 +7,3 @@ developer: "Trilogic Industries"
 category: development
 port: 5050
 icon: ./icon.png
-build: .
