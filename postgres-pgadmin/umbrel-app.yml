@@ -5,4 +5,5 @@ description: "PostgreSQL database with pgAdmin web UI"
 developer: "Your Name"
 category: development
 port: 5050
+icon: ./icon.png
 
