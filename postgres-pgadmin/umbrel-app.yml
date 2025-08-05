@@ -1,0 +1,8 @@
+id: postgres-pgadmin
+name: PostgreSQL + pgAdmin
+version: "1.0.0"
+description: "PostgreSQL database with pgAdmin web UI"
+developer: "Your Name"
+category: development
+port: 5050
+
