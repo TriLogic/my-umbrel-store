@@ -7,3 +7,9 @@ developer: "Trilogic Industries"
 category: other
 port: 5050
 icon: ./icon.png
+developer: "Trilogic Industries, LLC"
+website: https://github.com/TriLogic
+submitter: andrew
+submission: https://github.com/TriLogic/umbrel
+repo: https://github.com/TriLogic/umbrel/rilogic-postgres-pgadmin
+support: https://github.com/TriLogic/umbrel/rilogic-postgres-pgadmin
