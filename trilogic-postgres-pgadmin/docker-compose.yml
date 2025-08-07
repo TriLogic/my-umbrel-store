@@ -3,38 +3,42 @@ version: "3.7"
 services:
   db:
     image: postgres:16
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=appdb
+    volumes:
+      - db-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 3s
       retries: 30
-    volumes:
-      - db-data:/var/lib/postgresql/data
 
   app:
     image: dpage/pgadmin4:8
+    restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@local
-      - PGADMIN_DEFAULT_PASSWORD=admin
-      - PGADMIN_LISTEN_PORT=5050         # <— make pgAdmin listen on 5050
-      # Optional: make initial connection to the "db" service appear in Servers
+      # MUST be valid or pgAdmin exits and 5050 will refuse connections
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=changeme123
+      # Align pgAdmin’s internal port with Umbrel manifest `port: 5050`
+      - PGADMIN_LISTEN_PORT=5050
+      # Optional: set server mode (multi-user)
       - PGADMIN_CONFIG_SERVER_MODE=True
     volumes:
       - pgadmin-data:/var/lib/pgadmin
-      # Optional: auto-register a server (see servers.json below)
-      - ./servers.json:/pgadmin4/servers.json:ro
+      # Optional: auto-register the Postgres server on first boot
+      # - ./servers.json:/pgadmin4/servers.json:ro
     # Do NOT publish ports; Umbrel's Traefik handles ingress
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.trilogic-postgres-pgadmin.rule=Host(`${APP_DOMAIN}`)"
-      - "traefik.http.services.trilogic-postgres-pgadmin.loadbalancer.server.port=5050"  # <— matches PGADMIN_LISTEN_PORT
+      - "traefik.http.services.trilogic-postgres-pgadmin.loadbalancer.server.port=5050"
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5050/misc/ping || exit 1"]
       interval: 5s
