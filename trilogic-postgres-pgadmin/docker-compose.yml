@@ -1,35 +1,46 @@
-version: "3.8"
+version: "3.7"
 
 services:
-  postgres:
+  db:
     image: postgres:16
-    restart: unless-stopped
     environment:
-      POSTGRES_DB: monorail
-      POSTGRES_USER: monorail
-      POSTGRES_PASSWORD: change-this-password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=appdb
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - db-data:/var/lib/postgresql/data
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    restart: unless-stopped
+  app:
+    image: dpage/pgadmin4:8
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@local
-      PGADMIN_DEFAULT_PASSWORD: change-this-admin-pass
-    ports:
-      - "5050:80"
+      - PGADMIN_DEFAULT_EMAIL=admin@local
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=5050         # <— make pgAdmin listen on 5050
+      # Optional: make initial connection to the "db" service appear in Servers
+      - PGADMIN_CONFIG_SERVER_MODE=True
     volumes:
-      - pgadmin_data:/var/lib/pgadmin
+      - pgadmin-data:/var/lib/pgadmin
+      # Optional: auto-register a server (see servers.json below)
+      - ./servers.json:/pgadmin4/servers.json:ro
+    # Do NOT publish ports; Umbrel's Traefik handles ingress
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.trilogic-postgres-pgadmin.rule=Host(`${APP_DOMAIN}`)"
+      - "traefik.http.services.trilogic-postgres-pgadmin.loadbalancer.server.port=5050"  # <— matches PGADMIN_LISTEN_PORT
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5050/misc/ping || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 60
 
 volumes:
-  postgres_data:
-  pgadmin_data:
+  db-data:
+  pgadmin-data:
