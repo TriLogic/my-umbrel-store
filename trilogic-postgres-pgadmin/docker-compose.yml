@@ -30,6 +30,8 @@ services:
       - PGADMIN_LISTEN_PORT=5050
       # Optional: set server mode (multi-user)
       - PGADMIN_CONFIG_SERVER_MODE=True
+    ports:
+      - "5050:5050"   # <-- host:container
     volumes:
       - pgadmin-data:/var/lib/pgadmin
       # Optional: auto-register the Postgres server on first boot
