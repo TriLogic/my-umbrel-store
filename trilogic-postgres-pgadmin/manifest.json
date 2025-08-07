@@ -1,0 +1,32 @@
+{
+  "id": "pgadmin",
+  "name": "pgAdmin",
+  "version": "1.0.1",
+  "description": "pgAdmin is the most popular and feature rich Open Source administration and development platform for PostgreSQL.",
+  "website": "https://www.pgadmin.org/",
+  "repository": "https://github.com/dpage/pgadmin4",
+  "icon": "icon.svg",
+  "categories": ["database", "tools"],
+  "developer": {
+    "name": "pgAdmin Development Team",
+    "website": "https://www.pgadmin.org/"
+  },
+  "ports": [
+    {
+      "name": "Web UI",
+      "protocol": "tcp",
+      "target": 5050,
+      "published": 5050,
+      "description": "Open http://<umbrel-ip>:5050 in your browser to access pgAdmin."
+    }
+  ],
+  "dependencies": [],
+  "permissions": [
+    "network",
+    "storage"
+  ],
+  "defaultPassword": {
+    "user": "admin@example.com",
+    "password": "change-me"
+  }
+}
