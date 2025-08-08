@@ -1,10 +1,11 @@
 version: "3.8"
 
 services:
-  # Umbrel’s proxy forwards the App tile → this target
+  # Umbrel proxies the app tile to this target
   app_proxy:
     environment:
-      APP_HOST: web
+      # MUST be full container name format: <app-id>_<service>_1
+      APP_HOST: trilogic-postgres-pgadmin_web_1
       APP_PORT: 5050
       APP_PROTOCOL: http
 
@@ -32,7 +33,7 @@ services:
         condition: service_healthy
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${APP_PASSWORD}   # matches App Password in Umbrel UI
+      PGADMIN_DEFAULT_PASSWORD: ${APP_PASSWORD}   # matches the App Password in Umbrel UI
       PGADMIN_LISTEN_PORT: "5050"
       SERVER_MODE: "True"
     volumes:
@@ -45,18 +46,3 @@ services:
       timeout: 5s
       retries: 30
       start_period: 20s
-
-  # OPTIONAL: uncomment ONLY if you also want direct host access on :5050
-  # (Umbrel generally prefers not binding host ports.)
-  # web_host:
-  #   image: dpage/pgadmin4:8
-  #   restart: unless-stopped
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-  #     PGADMIN_DEFAULT_PASSWORD: ${APP_PASSWORD}
-  #     PGADMIN_LISTEN_PORT: "5050"
-  #     SERVER_MODE: "True"
-  #   volumes:
-  #     - ${APP_DATA_DIR}/pgadmin-data:/var/lib/pgadmin
-  #   ports:
-  #     - "5050:5050"
