@@ -1,0 +1,15 @@
+manifestVersion: 1
+id: hello-umbrel
+name: Hello Umbrel
+category: development
+tagline: The simplest Umbrel app possible.
+version: "0.0.1"
+description: "A basic app that shows 'Hello from Umbrel!' in your browser."
+developer: "Andrew Friedl"
+repo: https://github.com/TriLogic/hello-umbrel-store
+support: https://github.com/TriLogic/hello-umbrel-store/issues
+icon: icon.svg
+port: 80
+path: ""
+tor: true
+
