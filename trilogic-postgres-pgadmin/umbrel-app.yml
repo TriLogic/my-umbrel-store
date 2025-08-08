@@ -3,7 +3,7 @@ id: trilogic-postgres-pgadmin
 name: PostgreSQL + pgAdmin
 category: Development
 tagline: Run PostgreSQL and pgAdmin on Umbrel.
-version: "0.2.1"
+version: "0.2.2"
 description: "PostgreSQL database server with a pgAdmin web UI."
 developer: "Andrew Friedl"
 repo: https://github.com/TriLogic/umbrel
